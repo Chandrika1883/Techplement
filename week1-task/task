@@ -1,1 +1,119 @@
+package quiz;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Question {
+    String questionText;
+    String[] options;
+    int correctAnswer;
+
+    public Question(String questionText, String[] options, int correctAnswer) {
+        this.questionText = questionText;
+        this.options = options;
+        this.correctAnswer = correctAnswer;
+    }
+}
+
+class Quiz {
+    private ArrayList<Question> questions = new ArrayList<>();
+
+    public void addQuestion(String questionText, String[] options, int correctAnswer) {
+        questions.add(new Question(questionText, options, correctAnswer));
+    }
+
+    public void takeQuiz() {
+        if (questions.isEmpty()) {
+            System.out.println("No questions available in the quiz. Add some questions first.");
+            return;
+        }
+
+   
+        Scanner scanner = new Scanner(System.in);
+        int score = 0;
+
+        // Iterate through each question in the quiz
+        for (int i = 0; i < questions.size(); i++) {
+            Question q = questions.get(i);
+            System.out.println("\nQuestion " + (i + 1) + ": " + q.questionText);
+
+            // Display the options
+            for (int j = 0; j < q.options.length; j++) {
+                System.out.println((j + 1) + ". " + q.options[j]);
+            }
+
+            // Get user answer
+            System.out.print("Your answer (1-4): ");
+            int answer = scanner.nextInt();
+
+            // Check if the user's answer is correct
+            if (answer == q.correctAnswer) {
+                System.out.println("Correct!");
+                score++;  // Increase score for correct answer
+            } else {
+                // Provide feedback on the correct answer
+                System.out.println("Wrong! The correct answer is: " + q.options[q.correctAnswer - 1]);
+            }
+        }
+
+        // Display the result at the end of the quiz
+        System.out.println("\nQuiz Completed!");
+        System.out.println("Your Score: " + score + "/" + questions.size());
+    }
+}
+
+public class QuizGenerator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Quiz quiz = new Quiz();
+
+        while (true) {
+            // Display the menu
+            System.out.println("\n--- Quiz Generator Menu ---");
+            System.out.println("1. Add Question");
+            System.out.println("2. Take Quiz");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline
+
+            switch (choice) {
+                case 1:
+                    // Adding a new question to the quiz
+                    System.out.print("Enter the question: ");
+                    String questionText = scanner.nextLine();
+
+                    System.out.println("Enter 4 options:");
+                    String[] options = new String[4];
+                    for (int i = 0; i < 4; i++) {
+                        System.out.print("Option " + (i + 1) + ": ");
+                        options[i] = scanner.nextLine();
+                    }
+
+                    System.out.print("Enter the correct answer (1-4): ");
+                    int correctAnswer = scanner.nextInt();
+
+                    quiz.addQuestion(questionText, options, correctAnswer);
+                    System.out.println("Question added successfully!");
+                    break;
+
+                case 2:
+                    // Taking the quiz
+                    quiz.takeQuiz();
+                    break;
+
+                case 3:
+                    // Exit the quiz generator
+                    System.out.println("Exiting Quiz Generator. Goodbye!");
+                    return;
+
+                default:
+                    // Invalid option entered
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
+
+
+
 
